@@ -1,4 +1,6 @@
-﻿using Telegram.Bot;
+﻿using DataInteraction;
+using System.Net;
+using Telegram.Bot;
 using Telegram.Bot.Exceptions;
 using Telegram.Bot.Polling;
 using Telegram.Bot.Types;
@@ -13,10 +15,13 @@ namespace TelegramBot
         private ITelegramBotClient _tClient;
         private ReceiverOptions _receiverOptions;
 
-        public async Task<bool> StartBot(string key)
+        private DbProxy _dbProxy;
+
+        public async Task<bool> StartBot(string key, DbProxy db)
         {
+            _dbProxy = db;
             _botWorkCT = await StartListen(key);
-                        
+            
 
             return true;
         }

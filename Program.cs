@@ -1,4 +1,5 @@
-﻿using Microsoft.Extensions.Configuration.Json;
+﻿using DataInteraction;
+using Microsoft.Extensions.Configuration.Json;
 using TelegramBot;
 
 namespace PersonalFinances
@@ -7,9 +8,11 @@ namespace PersonalFinances
     {
         static void Main(string[] args)
         {
+
+            DbProxy proxy = new DbProxy(Configuration.GetSqlConnectionString());
             BotSheduler sheduller = new BotSheduler();
 
-            Task<bool> startTask = sheduller.StartBot(Configuration.GetTgBotKey());
+            Task<bool> startTask = sheduller.StartBot(Configuration.GetTgBotKey(), proxy);
             startTask.Wait();
 
             if (startTask.Result)
