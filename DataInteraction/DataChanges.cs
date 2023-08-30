@@ -1,4 +1,6 @@
-﻿namespace DataInteraction
+﻿using DataInteraction.Models;
+
+namespace DataInteraction
 {
     public class DataChanges
     {
@@ -7,6 +9,12 @@
         public DataChanges(string connectionString)
         {
             _db = new DbInteraction(connectionString);
+        }
+
+        public List<Currency> GetCurrencies()
+        {
+            var res = _db.OpenConnection();
+            return _db.GetCurrencies();
         }
     }
 }

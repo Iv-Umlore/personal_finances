@@ -1,5 +1,4 @@
 ﻿using DataInteraction;
-using Microsoft.Extensions.Configuration.Json;
 using TelegramBot;
 
 namespace PersonalFinances

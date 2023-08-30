@@ -1,4 +1,6 @@
-﻿namespace DataInteraction
+﻿using DataInteraction.Models;
+
+namespace DataInteraction
 {
     public class DbProxy
     {
@@ -8,6 +10,11 @@
             _dChanges = new DataChanges(connectionString);
 
             // Проверить окончание периодов лимитов
+        }
+
+        public List<Currency> GetCurrencyList()
+        {
+            return _dChanges.GetCurrencies();
         }
     }
 }

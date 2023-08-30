@@ -1,7 +1,9 @@
-﻿namespace DataInteraction.Models
+﻿using DataInteraction.Helpers;
+
+namespace DataInteraction.Models
 {
-    public class FinanceChange
-	{
+    public class FinanceChange : IBaseModel
+    {
 
 		public long ID { get; set; }
 
@@ -36,5 +38,11 @@
 		/// Сумма в общей валюте
 		/// </summary>
 		public double SumInIternationalCurrency { get; set; }
-	}
+
+        public string ToSqlInsertCommand()
+        {
+			return $"INSERT INTO main.FinanceChanges ({SQLModelFields.GetFinanceChangeFields})" +
+				$"VALUES ('{Converter.DateToString(DateOfFixation)}', {Summ.ToString("0.##")}, {CurrencyId}, '{Comment}', {FixedBy}, {CategoryId}, {SumInIternationalCurrency.ToString("0.##")})";
+        }
+    }
 }

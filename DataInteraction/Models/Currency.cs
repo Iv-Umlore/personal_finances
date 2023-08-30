@@ -1,4 +1,6 @@
-﻿namespace DataInteraction.Models
+﻿using DataInteraction.Helpers;
+
+namespace DataInteraction.Models
 {
     /// <summary>
     /// Валюта
@@ -31,9 +33,10 @@
         /// </summary>
         public double LastExchangeRate { get; set; }
 
-        public string ToSqlValues()
+        public string ToSqlInsertCommand()
         {
-            return $"'{0}', '{1}', '{2}', { 3}, { 4}, { 5}";
+            return $"INSERT INTO main.'Currencies' ({SQLModelFields.GetCurrencyFields()}) " +
+                $"VALUES ('{Name}', '{Sumbol}', '{OtherNames}', {(IsDefault ? 1 : 0)}, {(IsMainStable ? 1 : 0)}, {LastExchangeRate.ToString("0.##")})";
         }
 
     }
