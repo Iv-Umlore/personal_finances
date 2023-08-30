@@ -8,10 +8,13 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Assets\DbScripts\**" />
     <Compile Remove="DataInteraction\**" />
     <Compile Remove="TelegramBot\**" />
+    <EmbeddedResource Remove="Assets\DbScripts\**" />
     <EmbeddedResource Remove="DataInteraction\**" />
     <EmbeddedResource Remove="TelegramBot\**" />
+    <None Remove="Assets\DbScripts\**" />
     <None Remove="DataInteraction\**" />
     <None Remove="TelegramBot\**" />
   </ItemGroup>
