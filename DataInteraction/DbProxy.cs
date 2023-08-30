@@ -1,17 +1,13 @@
-﻿using Microsoft.Data.Sqlite;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace DataInteraction
+﻿namespace DataInteraction
 {
     public class DbProxy
     {
+        private DataChanges _dChanges;
+
         public DbProxy(string connectionString) {
-            var connection = new SqliteConnection(connectionString);
-            connection.Open();
+            _dChanges = new DataChanges(connectionString);
+
+            // Проверить окончание периодов лимитов
         }
     }
 }
