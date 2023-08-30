@@ -13,6 +13,16 @@ namespace PersonalFinances
             return value;
         }
 
+        public static long GetMainTelegramConfId()
+        {
+            var value = ConfigurationManager.AppSettings["mainFinanceConfId"];
+            if (!long.TryParse(value, out var result))
+                throw new Exception("doesn't constain conf_Id in appsettings");
+
+            return result;
+            
+        }
+
         public static string GetSqlConnectionString()
         {
             var value = ConfigurationManager.AppSettings["sqLiteConnection"];

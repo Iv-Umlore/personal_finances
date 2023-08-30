@@ -1,5 +1,4 @@
 ﻿using DataInteraction;
-using System.Net;
 using Telegram.Bot;
 using Telegram.Bot.Exceptions;
 using Telegram.Bot.Polling;
@@ -10,6 +9,7 @@ namespace TelegramBot
 {
     public class BotSheduler
     {
+        private long _mainConfId;
         private CancellationTokenSource _botWorkCT;
 
         private ITelegramBotClient _tClient;
@@ -17,11 +17,11 @@ namespace TelegramBot
 
         private DbProxy _dbProxy;
 
-        public async Task<bool> StartBot(string key, DbProxy db)
+        public async Task<bool> StartBot(string key, long confId, DbProxy db)
         {
             _dbProxy = db;
-            _botWorkCT = await StartListen(key);
-            
+            _mainConfId = confId;
+            _botWorkCT = await StartListen(key);            
 
             return true;
         }
@@ -37,11 +37,11 @@ namespace TelegramBot
                 },
                 // Параметр, отвечающий за обработку сообщений, пришедших за то время, когда ваш бот был оффлайн
                 // True - не обрабатывать, False (стоит по умолчанию) - обрабаывать
-                ThrowPendingUpdates = false,
+                ThrowPendingUpdates = false,                
             };
 
             using var cts = new CancellationTokenSource();
-
+            
             _tClient.StartReceiving(UpdateHandler, ErrorHandler, _receiverOptions, cts.Token); // Запускаем бота
 
             var me = await _tClient.GetMeAsync(); // Создаем переменную, в которую помещаем информацию о нашем боте.
@@ -64,11 +64,26 @@ namespace TelegramBot
                 {
                     case UpdateType.Message:
                         {
-                            if (update.Message != null && update.Message.Text.Contains(botName))
+                            if (update.Message.Chat.Id == _mainConfId)
                             {
-                                Console.WriteLine($"Пришло сообщение для меня!\r\n{update.Message?.Text}");
+                                if (update.Message != null && update.Message.Text != null && update.Message.Text.Contains(botName))
+                                {
+                                    Console.WriteLine($"Пришло сообщение для меня!\r\n{update.Message?.Text}");
+                                    await _tClient.SendTextMessageAsync(update.Message.Chat, $"И тебе привет @{update.Message?.From?.Username}");
+
+                                }
+                            }
+                            else
+                            {
+                                Console.WriteLine("Кто-то несанкционно пытается использовать бота");
+                            }
+
+                            // Личный чат с пользователем
+                            if (update.Message.Chat.Id > 0)
+                            {
 
                             }
+                            
                             return;
                         }
                 }

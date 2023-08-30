@@ -137,7 +137,7 @@ namespace DataInteraction
                         ParentID = reader.GetInt64(1),
                         Name = reader.GetString(2),
                         CreatedBy = reader.GetInt64(3),
-                        CreateDate = reader.GetDateTime(4)
+                        CreateDate = Converter.StringToDate(reader.GetString(4))
                     });
                 }
             }
@@ -160,7 +160,7 @@ namespace DataInteraction
                         ID = reader.GetInt64(0),
                         Name = reader.GetString(1),
                         Period = reader.GetString(2),
-                        StartPeriod = reader.GetDateTime(3),
+                        StartPeriod = Converter.StringToDate(reader.GetString(3)),
                         IsAutoProlongation = reader.GetBoolean(4),
                         IsActive = reader.GetBoolean(5)
                     });
@@ -183,8 +183,8 @@ namespace DataInteraction
                     result.Add(new Limit()
                     {
                         ID = reader.GetInt64(0),
-                        StartPeriod = reader.GetDateTime(1),
-                        EndPeriod = reader.GetDateTime(2),
+                        StartPeriod = Converter.StringToDate(reader.GetString(1)),
+                        EndPeriod = Converter.StringToDate(reader.GetString(2)),
                         LimitSumm = reader.GetDouble(3),
 
                     });
@@ -207,7 +207,7 @@ namespace DataInteraction
                     result.Add(new FinanceChange()
                     {
                         ID = reader.GetInt64(0),
-                        DateOfFixation = reader.GetDateTime(1),
+                        DateOfFixation = Converter.StringToDate(reader.GetString(1)),
                         Summ = reader.GetDouble(2),
                         CurrencyId = reader.GetInt64(3),
                         Comment = reader.GetString(4),
@@ -236,7 +236,7 @@ namespace DataInteraction
                         ID = reader.GetInt64(0),
                         TName = reader.GetString(1),
                         RealName = reader.GetString(2),
-                        DateCreate = reader.GetDateTime(3)
+                        DateCreate = Converter.StringToDate(reader.GetString(3))
                     });
                 }
             }

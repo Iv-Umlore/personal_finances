@@ -16,5 +16,10 @@ namespace DataInteraction
         {
             return _dChanges.GetCurrencies();
         }
+
+        public List<LimitType> GetLimitTypes()
+        {
+            return _dChanges.GetLimitTypes();
+        }
     }
 }
