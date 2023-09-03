@@ -12,6 +12,22 @@ namespace DataInteraction
             // Проверить окончание периодов лимитов
         }
 
+        #region Insert
+
+        public void InsertFinanceChange(FinanceChange model)
+        {
+            _dChanges.InsertFinanceChange(model);
+        }
+
+        #endregion
+
+
+        #region Update
+
+        #endregion
+
+        #region Get
+
         public List<Currency> GetCurrencyList()
         {
             return _dChanges.GetCurrencies();
@@ -21,5 +37,25 @@ namespace DataInteraction
         {
             return _dChanges.GetLimitTypes();
         }
+
+        public Currency GetDefaultCurrency()
+        {
+            return null;
+        }
+
+        public Currency GetLikelyCurrency(string currName)
+        {
+
+            return null;
+        }
+
+        public long GetLikelyCategoryId(string category)
+        {
+            return 0;
+        }
+
+        #endregion
+
+
     }
 }

@@ -1,9 +1,11 @@
 ﻿using DataInteraction;
+using DataInteraction.Models;
 using Telegram.Bot;
 using Telegram.Bot.Exceptions;
 using Telegram.Bot.Polling;
 using Telegram.Bot.Types;
 using Telegram.Bot.Types.Enums;
+//using Telegram.Bots.Types;
 
 namespace TelegramBot
 {
@@ -59,7 +61,6 @@ namespace TelegramBot
 
             try
             {
-
                 switch (update.Type)
                 {
                     case UpdateType.Message:
@@ -68,8 +69,29 @@ namespace TelegramBot
                             {
                                 if (update.Message != null && update.Message.Text != null && update.Message.Text.Contains(botName))
                                 {
-                                    Console.WriteLine($"Пришло сообщение для меня!\r\n{update.Message?.Text}");
-                                    await _tClient.SendTextMessageAsync(update.Message.Chat, $"И тебе привет @{update.Message?.From?.Username}");
+                                    // Хочу получать сообщения вида @bot сумма валюта категория . комментарий
+                                    string[] spliting = update.Message.Text.Split('-');
+                                    if (spliting.Length != 2)
+                                    {
+                                        await _tClient.SendTextMessageAsync(update.Message.Chat, GetFormatMessage(botName));
+                                        return;
+                                    }
+                                    string comment = spliting[1];
+                                    string[] mainInfos = spliting[0].Split(" ",StringSplitOptions.RemoveEmptyEntries);
+
+                                    try {
+
+                                        var node = GetFinanceChangeForInsert(mainInfos, comment);
+                                        // Добавить пользователя и время фиксации к объекту
+
+                                        _dbProxy.InsertFinanceChange(node);
+                                        await _tClient.SendTextMessageAsync(update.Message.Chat, "Зафиксировано");
+                                    }
+                                    catch (Exception ex)
+                                    {
+                                        Console.WriteLine($"{DateTime.Now} : {ex}");
+                                        await _tClient.SendTextMessageAsync(update.Message.Chat, "Произошла ошибка при фиксации, проверяйте Логи");
+                                    }
 
                                 }
                             }
@@ -108,6 +130,50 @@ namespace TelegramBot
             return Task.CompletedTask;
         }
 
+        /// <summary>
+        /// @{botName} сумма валюта(опционально) категория - Комментарий
+        /// </summary>
+        private FinanceChange GetFinanceChangeForInsert(string[] messagePart, string comment)
+        {
+            // Нужно понять что за валюта
+            if (messagePart.Length == 4)
+            {
+                Currency cur = _dbProxy.GetLikelyCurrency(messagePart[2]);
+                var sum = double.Parse(messagePart[1]);
+                FinanceChange financeChange = new FinanceChange()
+                {
+                    Summ = sum,
+                    CurrencyId = cur.ID,
+                    CategoryId = _dbProxy.GetLikelyCategoryId(messagePart[3]),
+                    Comment = comment,
+                    SumInIternationalCurrency = sum / cur.LastExchangeRate
+                };
+                return financeChange;
+            }
+
+            // Валюта по умолчанию
+            if (messagePart.Length == 3)
+            {
+                Currency cur = _dbProxy.GetDefaultCurrency();
+                var sum = double.Parse(messagePart[1]);
+                FinanceChange financeChange = new FinanceChange()
+                {
+                    Summ = sum,
+                    CurrencyId = cur.ID,
+                    CategoryId = _dbProxy.GetLikelyCategoryId(messagePart[3]),
+                    Comment = comment,
+                    SumInIternationalCurrency = sum / cur.LastExchangeRate
+                };
+                return financeChange;
+            }
+
+            throw new Exception("Проблема с получением информации о категории");
+        }
+
+        private string GetFormatMessage(string botName)
+        {
+            return $"Ошибка формата!\r\n\r\nОжидаю получение информации о тратах в виде: \r\n@{botName} сумма валюта(опционально) категория - Комментарий : \r\n@{botName} 1000 Еда - Купили мороженое\r\n@{botName} 20.95 лари Кафе - Сходили в Макдоналдс\r\n\r\n Соблюдение пробелов и тире обязательно!";
+        }
 
     }
 }

@@ -11,6 +11,18 @@ namespace DataInteraction
             _db = new DbInteraction(connectionString);
         }
 
+        #region Insert
+
+        public void InsertFinanceChange(FinanceChange model)
+        {
+            if (!_db.InsertInto_FinanceChange(model))
+                throw new Exception("Не удалось сохранить модель");
+
+            
+        }
+
+        #endregion
+
         public List<Currency> GetCurrencies()
         {
             var res = _db.OpenConnection();

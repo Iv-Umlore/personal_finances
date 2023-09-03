@@ -28,7 +28,7 @@ namespace DataInteraction
 
         public void SaveChanges()
         {
-
+            //connection.
         }
 
         #region INSERT
@@ -36,6 +36,7 @@ namespace DataInteraction
         public bool InsertInto_Currency(Currency currency)
         {
             SqliteCommand command = connection.CreateCommand();
+            command.Connection = connection;
             command.CommandText = currency.ToSqlInsertCommand();
 
             command.ExecuteNonQuery();
@@ -77,6 +78,8 @@ namespace DataInteraction
             command.CommandText = financeChange.ToSqlInsertCommand();
 
             command.ExecuteNonQuery();
+
+            //command.Transaction.Commit();
 
             return true;
         }
