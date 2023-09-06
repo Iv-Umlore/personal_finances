@@ -54,6 +54,13 @@ namespace DataInteraction
             return 0;
         }
 
+        public long GetDbUserIdByUsername(string userName)
+        {
+            if (userName == null)
+                return 0;
+            return 0;
+        }
+
         #endregion
 
 

@@ -5,7 +5,7 @@ using Telegram.Bot.Exceptions;
 using Telegram.Bot.Polling;
 using Telegram.Bot.Types;
 using Telegram.Bot.Types.Enums;
-//using Telegram.Bots.Types;
+using TelegramBot.Worker;
 
 namespace TelegramBot
 {
@@ -18,6 +18,7 @@ namespace TelegramBot
         private ReceiverOptions _receiverOptions;
 
         private DbProxy _dbProxy;
+        private UserSpeaker _speaker;
 
         public async Task<bool> StartBot(string key, long confId, DbProxy db)
         {
@@ -82,7 +83,8 @@ namespace TelegramBot
                                     try {
 
                                         var node = GetFinanceChangeForInsert(mainInfos, comment);
-                                        // Добавить пользователя и время фиксации к объекту
+                                        node.DateOfFixation = update.Message.Date;
+                                        node.FixedBy = _dbProxy.GetDbUserIdByUsername(update.Message?.From?.Username);
 
                                         _dbProxy.InsertFinanceChange(node);
                                         await _tClient.SendTextMessageAsync(update.Message.Chat, "Зафиксировано");
@@ -103,7 +105,10 @@ namespace TelegramBot
                             // Личный чат с пользователем
                             if (update.Message.Chat.Id > 0)
                             {
-
+                                if (update.Message?.Text == null)
+                                    await _tClient.SendTextMessageAsync(update.Message.Chat, "Отправлено пустое сообщение");
+                                string answer = _speaker.DoSmtg(update.Message?.Text);
+                                await _tClient.SendTextMessageAsync(update.Message.Chat, answer);
                             }
                             
                             return;
