@@ -40,18 +40,29 @@ namespace DataInteraction
 
         public Currency GetDefaultCurrency()
         {
-            return null;
+            var res = _dChanges.GetDefaultCurrency();
+            if (res == null)
+                throw new Exception("Валюта по умолчанию не найдена");
+
+            return res;
         }
 
         public Currency GetLikelyCurrency(string currName)
         {
+            var result = _dChanges.GetLikelyCurrency(currName);
+            if (result == null)
+                throw new Exception("Не удалось найти похожую валюту");
+            return result;   
 
-            return null;
         }
 
         public long GetLikelyCategoryId(string category)
         {
-            return 0;
+            var res = _dChanges.GetLikelyCategory(category);
+            if (res == null)
+                throw new Exception("Не удалось cопоставить категорию");
+
+            return res.ID;
         }
 
         public long GetDbUserIdByUsername(string userName)

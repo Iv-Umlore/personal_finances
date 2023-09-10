@@ -107,8 +107,16 @@ namespace TelegramBot
                             {
                                 if (update.Message?.Text == null)
                                     await _tClient.SendTextMessageAsync(update.Message.Chat, "Отправлено пустое сообщение");
-                                string answer = _speaker.DoSmtg(update.Message?.Text);
-                                await _tClient.SendTextMessageAsync(update.Message.Chat, answer);
+                                try
+                                {
+                                    string answer = _speaker.DoSmtg(update.Message?.Text);
+                                    await _tClient.SendTextMessageAsync(update.Message.Chat, answer);
+                                }
+                                catch (Exception ex)
+                                {
+                                    Console.WriteLine($"{DateTime.Now} : {ex}");
+                                    await _tClient.SendTextMessageAsync(update.Message.Chat, "Произошла ошибка при фиксации, проверяйте Логи");
+                                }
                             }
                             
                             return;
