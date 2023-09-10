@@ -41,8 +41,8 @@ namespace DataInteraction.Models
 
         public string ToSqlInsertCommand()
         {
-			return $"INSERT INTO main.FinanceChanges ({SQLModelFields.GetFinanceChangeFields})" +
-				$"VALUES ('{Converter.DateToString(DateOfFixation)}', {Summ.ToString("0.##")}, {CurrencyId}, '{Comment}', {FixedBy}, {CategoryId}, {SumInIternationalCurrency.ToString("0.##")})";
+			return $"INSERT INTO main.FinanceChanges ({SQLModelFields.GetFinanceChangeFields()})" +
+				$"VALUES ('{Converter.DateToString(DateOfFixation)}', {Converter.DoubleToString(Summ)}, {CurrencyId}, '{Comment}', {FixedBy}, {CategoryId}, {Converter.DoubleToString(SumInIternationalCurrency)})";
         }
     }
 }

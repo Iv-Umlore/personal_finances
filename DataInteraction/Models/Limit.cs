@@ -21,7 +21,7 @@ namespace DataInteraction.Models
         public string ToSqlInsertCommand()
         {
             return $"INSERT INTO main.Limits ({SQLModelFields.GetLimitFields()}) " +
-                $"VALUES ('{Converter.DateToString(StartPeriod)}', '{Converter.DateToString(EndPeriod)}', {LimitSumm.ToString("0.##")}, {LimitTypeId}, {CreditByLastPeriod.ToString("0.##")}, {CurrencyId})";
+                $"VALUES ('{Converter.DateToString(StartPeriod)}', '{Converter.DateToString(EndPeriod)}', {Converter.DoubleToString(LimitSumm)}, {LimitTypeId}, {Converter.DoubleToString(CreditByLastPeriod)}, {CurrencyId})";
         }
     }
 }

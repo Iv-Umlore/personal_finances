@@ -67,6 +67,7 @@ namespace DataInteraction
             Category res = null;
             int bestCoeff = 0;
 
+            _db.OpenConnection();
             var categories = _db.GetCategory();
 
             foreach (var category in categories)
@@ -87,6 +88,11 @@ namespace DataInteraction
         public Currency GetDefaultCurrency()
         {
             return _db.GetCurrencies().FirstOrDefault(it => it.IsDefault);
+        }
+
+        public User GetUserByName(string userName)
+        {
+            return _db.GetUsers().FirstOrDefault(it => it.TName == $"@{userName}");
         }
 
         public List<Currency> GetCurrencies()

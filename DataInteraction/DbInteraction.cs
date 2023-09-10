@@ -137,7 +137,7 @@ namespace DataInteraction
                     result.Add(new Category()
                     {
                         ID = reader.GetInt64(0),
-                        ParentID = reader.GetInt64(1),
+                        ParentID = reader.IsDBNull(1) ? -1 : reader.GetInt64(1),
                         Name = reader.GetString(2),
                         CreatedBy = reader.GetInt64(3),
                         CreateDate = Converter.StringToDate(reader.GetString(4))

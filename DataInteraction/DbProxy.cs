@@ -69,7 +69,11 @@ namespace DataInteraction
         {
             if (userName == null)
                 return 0;
-            return 0;
+            var user = _dChanges.GetUserByName(userName);
+            if (user == null)
+                throw new Exception("Пользователь не найден");
+
+            return user.ID;
         }
 
         #endregion

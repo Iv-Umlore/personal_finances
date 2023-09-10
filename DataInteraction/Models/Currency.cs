@@ -36,7 +36,7 @@ namespace DataInteraction.Models
         public string ToSqlInsertCommand()
         {
             return $"INSERT INTO main.'Currencies' ({SQLModelFields.GetCurrencyFields()}) " +
-                $"VALUES ('{Name}', '{Sumbol}', '{OtherNames}', {(IsDefault ? 1 : 0)}, {(IsMainStable ? 1 : 0)}, {LastExchangeRate.ToString("0.##")})";
+                $"VALUES ('{Name}', '{Sumbol}', '{OtherNames}', {(IsDefault ? 1 : 0)}, {(IsMainStable ? 1 : 0)}, {Converter.DoubleToString(LastExchangeRate)})";
         }
 
     }
