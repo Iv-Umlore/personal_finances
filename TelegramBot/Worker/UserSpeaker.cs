@@ -1,10 +1,10 @@
-﻿using TelegramBot.Cases;
+﻿using DataInteraction;
+using TelegramBot.Cases;
 
 namespace TelegramBot.Worker
 {
     public class UserSpeaker
     {
-
         private string _lastCommands;
         private string _currentCommand;
 
@@ -12,11 +12,11 @@ namespace TelegramBot.Worker
         private LimitCases _limitCases;
         private CategoriesCases _categoriesCases;
 
-        public UserSpeaker()
+        public UserSpeaker(DbProxy proxy)
         {
-            _currencyCases = new CurrencyCases();
-            _limitCases = new LimitCases();
-            _categoriesCases = new CategoriesCases();
+            _currencyCases = new CurrencyCases(proxy);
+            _limitCases = new LimitCases(proxy);
+            _categoriesCases = new CategoriesCases(proxy);
         }
 
         public string DoSmtg(string command)
@@ -50,6 +50,7 @@ namespace TelegramBot.Worker
 
                 default:
                     _lastCommands = "";
+                    _currentCommand = "";
                     return KeyWords.BaseMessage;
             }
         }

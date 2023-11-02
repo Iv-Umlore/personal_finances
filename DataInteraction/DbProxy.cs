@@ -9,20 +9,46 @@ namespace DataInteraction
         public DbProxy(string connectionString) {
             _dChanges = new DataChanges(connectionString);
 
-            // Проверить окончание периодов лимитов
+            // TODO Проверить окончание периодов лимитов
         }
 
         #region Insert
 
-        public void InsertFinanceChange(FinanceChange model)
+        public void InsertFinanceChange(FinanceChange finChange)
         {
-            _dChanges.InsertFinanceChange(model);
+            _dChanges.InsertFinanceChange(finChange);
+        }
+
+        public void InsertCategory(Category category)
+        {
+            _dChanges.InsertCategory(category);
+        }
+
+        public void InsertCurrency(Currency currency)
+        {
+            _dChanges.InsertCurrency(currency);
+        }
+
+        public void InsertLimit(Limit limit)
+        {
+            _dChanges.InsertLimit(limit);
         }
 
         #endregion
 
-
         #region Update
+
+        public void UpdateCategory(Category category)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void UpdateCurrency(Currency currency)
+        {
+            throw new NotImplementedException();
+        }
+
+    
 
         #endregion
 

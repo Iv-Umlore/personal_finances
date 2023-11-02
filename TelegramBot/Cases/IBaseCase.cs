@@ -2,6 +2,9 @@
 {
     public interface IBaseCase
     {
+        /// <summary>
+        /// Выполнить команду
+        /// </summary>
         public string ProcessTheCommand(string fullCommand);
     }
 }

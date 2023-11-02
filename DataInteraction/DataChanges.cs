@@ -17,9 +17,24 @@ namespace DataInteraction
         public void InsertFinanceChange(FinanceChange model)
         {
             if (!_db.InsertInto_FinanceChange(model))
-                throw new Exception("Не удалось сохранить модель");
+                throw new Exception("Не удалось сохранить модель");            
+        }
 
-            
+        public void InsertCategory(Category category) {
+            if (!_db.InsertInto_Category(category)) 
+                throw new Exception("Не удалось сохранить модель");
+        }
+
+        public void InsertCurrency(Currency currency)
+        {
+            if (_db.InsertInto_Currency(currency))
+                throw new Exception("Не удалось сохранить модель");
+        }
+
+        public void InsertLimit(Limit limit)
+        {
+            if (_db.InsertInto_Limit(limit))
+                throw new Exception("Не удалось сохранить модель");
         }
 
         #endregion

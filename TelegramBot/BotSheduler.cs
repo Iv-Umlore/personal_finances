@@ -20,11 +20,14 @@ namespace TelegramBot
         private DbProxy _dbProxy;
         private UserSpeaker _speaker;
 
+        // Обработать чтобы не было вариантов Null
+
         public async Task<bool> StartBot(string key, long confId, DbProxy db)
         {
             _dbProxy = db;
             _mainConfId = confId;
-            _botWorkCT = await StartListen(key);            
+            _botWorkCT = await StartListen(key);
+            _speaker = new UserSpeaker(db);
 
             return true;
         }
@@ -66,44 +69,46 @@ namespace TelegramBot
                 {
                     case UpdateType.Message:
                         {
-                            if (update.Message.Chat.Id == _mainConfId)
+                            if (update.Message.Chat.Id < 0)
                             {
-                                if (update.Message != null && update.Message.Text != null && update.Message.Text.Contains(botName))
+                                if (update.Message.Chat.Id == _mainConfId)
                                 {
-                                    // Хочу получать сообщения вида @bot сумма валюта категория . комментарий
-                                    string[] spliting = update.Message.Text.Split('-');
-                                    if (spliting.Length != 2)
+                                    if (update.Message != null && update.Message.Text != null && update.Message.Text.Contains(botName))
                                     {
-                                        await _tClient.SendTextMessageAsync(update.Message.Chat, GetFormatMessage(botName));
-                                        return;
+                                        // Хочу получать сообщения вида @bot сумма валюта категория . комментарий
+                                        string[] spliting = update.Message.Text.Split('-');
+                                        if (spliting.Length != 2)
+                                        {
+                                            await _tClient.SendTextMessageAsync(update.Message.Chat, GetFormatMessage(botName));
+                                            return;
+                                        }
+                                        string comment = spliting[1];
+                                        string[] mainInfos = spliting[0].Split(" ", StringSplitOptions.RemoveEmptyEntries);
+
+                                        try
+                                        {
+
+                                            var node = GetFinanceChangeForInsert(mainInfos, comment);
+                                            node.DateOfFixation = update.Message.Date;
+                                            node.FixedBy = _dbProxy.GetDbUserIdByUsername(update.Message?.From?.Username);
+
+                                            _dbProxy.InsertFinanceChange(node);
+                                            await _tClient.SendTextMessageAsync(update.Message.Chat, "Зафиксировано");
+                                        }
+                                        catch (Exception ex)
+                                        {
+                                            Console.WriteLine($"{DateTime.Now} : {ex}");
+                                            await _tClient.SendTextMessageAsync(update.Message.Chat, "Произошла ошибка при фиксации, проверяйте Логи");
+                                        }
+
                                     }
-                                    string comment = spliting[1];
-                                    string[] mainInfos = spliting[0].Split(" ",StringSplitOptions.RemoveEmptyEntries);
-
-                                    try {
-
-                                        var node = GetFinanceChangeForInsert(mainInfos, comment);
-                                        node.DateOfFixation = update.Message.Date;
-                                        node.FixedBy = _dbProxy.GetDbUserIdByUsername(update.Message?.From?.Username);
-
-                                        _dbProxy.InsertFinanceChange(node);
-                                        await _tClient.SendTextMessageAsync(update.Message.Chat, "Зафиксировано");
-                                    }
-                                    catch (Exception ex)
-                                    {
-                                        Console.WriteLine($"{DateTime.Now} : {ex}");
-                                        await _tClient.SendTextMessageAsync(update.Message.Chat, "Произошла ошибка при фиксации, проверяйте Логи");
-                                    }
-
+                                }
+                                else
+                                {
+                                    Console.WriteLine("Кто-то несанкционно пытается использовать бота");
                                 }
                             }
-                            else
-                            {
-                                Console.WriteLine("Кто-то несанкционно пытается использовать бота");
-                            }
-
-                            // Личный чат с пользователем
-                            if (update.Message.Chat.Id > 0)
+                            else // Личный чат с пользователем
                             {
                                 if (update.Message?.Text == null)
                                     await _tClient.SendTextMessageAsync(update.Message.Chat, "Отправлено пустое сообщение");
