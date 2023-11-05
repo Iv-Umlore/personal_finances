@@ -9,9 +9,9 @@ namespace PersonalFinances
         {
 
             DbProxy proxy = new DbProxy(Configuration.GetSqlConnectionString());
-            BotSheduler sheduller = new BotSheduler();
+            BotSheduler sheduller = new BotSheduler(Configuration.GetMainTelegramConfId(), proxy);
 
-            Task<bool> startTask = sheduller.StartBot(Configuration.GetTgBotKey(), Configuration.GetMainTelegramConfId(), proxy);
+            Task<bool> startTask = sheduller.StartBot(Configuration.GetTgBotKey());
             startTask.Wait();
 
             if (startTask.Result)

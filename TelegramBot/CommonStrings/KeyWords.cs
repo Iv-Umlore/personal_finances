@@ -1,9 +1,7 @@
-﻿namespace TelegramBot.Worker
+﻿namespace TelegramBot.CommonStrings
 {
     public static class KeyWords
     {
-        public const string BaseMessage = $"Для управления ботом выберите одну из следующих команд: \r\n {Cansel} - отмена операции";
-
         /// <summary>
         /// Cansel operations
         /// </summary>
@@ -29,6 +27,10 @@
         public const string AddOperation = "/delete";
 
         public static List<string> Commands = new List<string>() { Category, Currency, Limits };
+
+
+
+        public static string CommonSeparator = "&^&";
 
     }
 }

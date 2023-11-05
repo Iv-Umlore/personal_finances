@@ -1,4 +1,5 @@
-﻿using DataInteraction.Models;
+﻿using Common.Models;
+using DataInteraction.Models;
 
 namespace DataInteraction
 {
@@ -48,7 +49,10 @@ namespace DataInteraction
             throw new NotImplementedException();
         }
 
-    
+        public void UpdateLimit(Limit limit)
+        {
+            throw new NotImplementedException();
+        }
 
         #endregion
 
@@ -100,6 +104,18 @@ namespace DataInteraction
                 throw new Exception("Пользователь не найден");
 
             return user.ID;
+        }
+
+        public List<CategorySimpleModel> GetSubdirectory(long parentId)
+        {
+            var categories = _dChanges.GetCategories(parentId);
+            return categories.Select(it => new CategorySimpleModel()
+            {
+                Id = it.ID,
+                Name = it.Name,
+                ParentId = parentId
+
+            }).ToList();
         }
 
         #endregion

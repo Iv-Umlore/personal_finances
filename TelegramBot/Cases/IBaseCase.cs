@@ -5,6 +5,6 @@
         /// <summary>
         /// Выполнить команду
         /// </summary>
-        public string ProcessTheCommand(string fullCommand);
+        public string ProcessTheCommand(string  userName, List<string> Commands);
     }
 }

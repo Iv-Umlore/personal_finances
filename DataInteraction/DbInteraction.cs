@@ -124,9 +124,14 @@ namespace DataInteraction
             return result;
         }
 
-        public List<Category> GetCategory() {
+        public List<Category> GetCategory(long? parentId = null) {
             SqliteCommand command = connection.CreateCommand();
             command.CommandText = $"SELECT {SQLModelFields.GetCategory_Full()} FROM main.Categories";
+
+            if (parentId.HasValue)
+            {
+                command.CommandText += $" WHERE ParentID = {parentId.Value}";
+            }
 
             List<Category> result = new List<Category>();
 

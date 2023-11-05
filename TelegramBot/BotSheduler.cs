@@ -5,6 +5,7 @@ using Telegram.Bot.Exceptions;
 using Telegram.Bot.Polling;
 using Telegram.Bot.Types;
 using Telegram.Bot.Types.Enums;
+using TelegramBot.CommonStrings;
 using TelegramBot.Worker;
 
 namespace TelegramBot
@@ -22,13 +23,19 @@ namespace TelegramBot
 
         // Обработать чтобы не было вариантов Null
 
-        public async Task<bool> StartBot(string key, long confId, DbProxy db)
-        {
+        /// <summary>
+        /// Конструктор
+        /// </summary>
+        public BotSheduler(long confId, DbProxy db) {
+
             _dbProxy = db;
             _mainConfId = confId;
-            _botWorkCT = await StartListen(key);
             _speaker = new UserSpeaker(db);
+        }
 
+        public async Task<bool> StartBot(string key)
+        {
+            _botWorkCT = await StartListen(key);
             return true;
         }
 
@@ -79,7 +86,8 @@ namespace TelegramBot
                                         string[] spliting = update.Message.Text.Split('-');
                                         if (spliting.Length != 2)
                                         {
-                                            await _tClient.SendTextMessageAsync(update.Message.Chat, GetFormatMessage(botName));
+                                            await _tClient.SendTextMessageAsync(update.Message.Chat,
+                                                CommonPhraces.GetFormatMessage(botName));
                                             return;
                                         }
                                         string comment = spliting[1];
@@ -114,7 +122,7 @@ namespace TelegramBot
                                     await _tClient.SendTextMessageAsync(update.Message.Chat, "Отправлено пустое сообщение");
                                 try
                                 {
-                                    string answer = _speaker.DoSmtg(update.Message?.Text);
+                                    string answer = _speaker.DoSmtg(update.Message?.From.Username ,update.Message?.Text);
                                     await _tClient.SendTextMessageAsync(update.Message.Chat, answer);
                                 }
                                 catch (Exception ex)
@@ -186,11 +194,6 @@ namespace TelegramBot
             }
 
             throw new Exception("Проблема с получением информации о категории");
-        }
-
-        private string GetFormatMessage(string botName)
-        {
-            return $"Ошибка формата!\r\n\r\nОжидаю получение информации о тратах в виде: \r\n@{botName} сумма валюта(опционально) категория - Комментарий \r\nПримеры:\r\n@{botName} 1000 Еда - Купили мороженое\r\n@{botName} 20.95 лари Кафе - Сходили в Макдоналдс\r\n\r\n Соблюдение пробелов и тире обязательно!";
         }
 
     }

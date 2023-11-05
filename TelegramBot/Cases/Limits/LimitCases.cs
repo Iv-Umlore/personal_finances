@@ -12,7 +12,7 @@ namespace TelegramBot.Cases
             _dbProxy = dbProxy;
         }
 
-        public string ProcessTheCommand(string fullCommand)
+        public string ProcessTheCommand(string userName, List<string> fullCommand)
         {
             throw new NotImplementedException();
         }
@@ -53,7 +53,7 @@ namespace TelegramBot.Cases
         {
             try
             {
-                _dbProxy.InsertLimit(new Limit()
+                _dbProxy.UpdateLimit(new Limit()
                 {
                     ID = limitId,
                     CurrencyId = currencyId,

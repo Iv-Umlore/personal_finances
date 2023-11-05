@@ -122,6 +122,17 @@ namespace DataInteraction
             return _db.GetLimitTypes();
         }
 
+        /// <summary>
+        /// Получить категории
+        /// </summary>
+        /// <param name="parentId"> Id родительской папки </param>
+        /// <returns></returns>
+        public List<Category> GetCategories(long? parentId = null)
+        {
+            var res = _db.OpenConnection();
+            return _db.GetCategory(parentId);
+        }
+
         #endregion
 
     }
