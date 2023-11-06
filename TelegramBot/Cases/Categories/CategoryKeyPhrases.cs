@@ -1,6 +1,6 @@
 ﻿using System.Text;
 
-namespace TelegramBot.Cases
+namespace TelegramBot.Cases.Categories
 {
     public static class CategoryKeyPhrases
     {
@@ -8,9 +8,9 @@ namespace TelegramBot.Cases
 
         #region CategoryKeys
 
-        public static string AddCategory = "/ADD";
+        public static string AddCategory = "/AddCategory";
 
-        public static string UpdateCategory = "/UPDATE";
+        public static string UpdateCategory = "/UpdateCategory";
 
         #endregion
 
@@ -21,7 +21,7 @@ namespace TelegramBot.Cases
         /// Сообщение выбора действия
         /// </summary>
         public static string ChoiceActionMessage = "Выберите действие:" +
-            $"\r\n {AddCategory} - Добавить новую категорию" +
+            $"\r\n{AddCategory} - Добавить новую категорию" +
             //$"\r\n {UpdateCategory} - Обновить существующую категорию" +
             "";
 

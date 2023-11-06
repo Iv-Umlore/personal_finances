@@ -3,9 +3,9 @@
     public static class KeyWords
     {
         /// <summary>
-        /// Cansel operations
+        /// Canсel operations
         /// </summary>
-        public const string Cansel = "/cansel";
+        public const string Canсel = "/cancel";
 
         /// <summary>
         /// Operations with categories (add, update)
