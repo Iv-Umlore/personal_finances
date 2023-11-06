@@ -1,12 +1,12 @@
 ﻿using DataInteraction;
 using DataInteraction.Models;
 
-namespace TelegramBot.Cases
+namespace TelegramBot.Cases.Currency
 {
     /// <summary>
     /// Работа с валютами
     /// </summary>
-    public class CurrencyCases : IBaseCase
+    public class CurrencyCases : BaseCase
     {
         private DbProxy _dbProxy;
 
@@ -15,7 +15,7 @@ namespace TelegramBot.Cases
             _dbProxy = dbProxy;
         }
 
-        public string ProcessTheCommand(string userName, List<string> fullCommand)
+        protected override Func<string, List<string>, string> GetNextStep(string userName, List<string> commands)
         {
             throw new NotImplementedException();
         }
