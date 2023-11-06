@@ -14,98 +14,22 @@ namespace TelegramBot.Cases.Limits
 
         protected override Func<string, List<string>, string> GetNextStep(string userName, List<string> commands)
         {
-            switch (commands.Count)
+            if (commands.Count == 1)
+                return GetFirstMessage;
+
+            if (commands.Count > 1)
             {
-                case 1:
-                    return GetFirstMessage;
+                if (commands[1] == LimitKeyPhrases.AddLimitType)
+                    return GetNextStep_AddLimitType(userName, commands);
 
-                case 2:
-                    if (commands[1] == LimitKeyPhrases.AddLimitType)
-                    {
+                if (commands[1] == LimitKeyPhrases.ChangeLimitType)
+                    return GetNextStep_ChangeLimitType(userName, commands);
 
-                    }
-                    if (commands[1] == LimitKeyPhrases.ChangeLimitType)
-                    {
-
-                    }
-                    if (commands[1] == LimitKeyPhrases.AddLimit)
-                    {
-                        // Выбор начала периода лимита
-                        return AddLimit_ChoiceLimitStartDate;
-                    }
-                    return DefaultAnswer;
-
-                case 3:
-                    if (commands[1] == LimitKeyPhrases.AddLimitType)
-                    {
-
-                    }
-                    if (commands[1] == LimitKeyPhrases.ChangeLimitType)
-                    {
-
-                    }
-                    if (commands[1] == LimitKeyPhrases.AddLimit)
-                    {
-                        // Выбор валюты
-                        return AddLimit_ChoiceCurrency;
-                    }
-                    return DefaultAnswer;
-
-                case 4:
-                    if (commands[1] == LimitKeyPhrases.AddLimitType)
-                    {
-
-                    }
-                    if (commands[1] == LimitKeyPhrases.ChangeLimitType)
-                    {
-
-                    }
-                    if (commands[1] == LimitKeyPhrases.AddLimit)
-                    {
-                        // Выбор размера лимита
-                        return AddLimit_ChoiceLimitSize;
-                    }
-                    return DefaultAnswer;
-
-                case 5:
-                    if (commands[1] == LimitKeyPhrases.AddLimitType)
-                    {
-
-                    }
-                    if (commands[1] == LimitKeyPhrases.ChangeLimitType)
-                    {
-
-                    }
-                    if (commands[1] == LimitKeyPhrases.AddLimit)
-                    {
-                        // Выбор типа лимита
-                        return AddLimit_ChoiceLimitType;
-                    }
-                    return DefaultAnswer;
-
-                case 6:
-                    if (commands[1] == LimitKeyPhrases.AddLimit)
-                    {
-                        // Не Custom лимит
-                        if (commands[5] != "/0")
-                            return AddLimit_DoItAndreturnCompleteMessage;
-                        // Для Custom дату задаёт сам пользователь
-                        else
-                            return AddLimit_ChoiceLimitEndDate;
-                    }
-                    return DefaultAnswer;
-
-                case 7:
-                    if (commands[1] == LimitKeyPhrases.AddLimit)
-                    {
-                        // Получены данные о дате окончания лимита для кастомного типа
-                        return AddLimit_DoItAndreturnCompleteMessage;
-                    }
-                    return DefaultAnswer;
-
-                default:
-                    return DefaultAnswer;
+                if (commands[1] == LimitKeyPhrases.AddLimit)
+                    return GetNextStep_AddLimit(commands);
             }
+
+            return DefaultAnswer;
         }
 
         #region MainActions
@@ -181,11 +105,48 @@ namespace TelegramBot.Cases.Limits
             return LimitKeyPhrases.ChoiceActionMessage;
         } 
 
-        // TODO вариант на подумать
-
-        private Func<string, List<string>, string> GetNextStep_AddLimit(string userName, List<string> commands)
+        private Func<string, List<string>, string> GetNextStep_AddLimit(List<string> commands)
         {
-            throw new NotImplementedException();
+            switch (commands.Count)
+            {
+                case 2:
+                    // Выбор начала периода лимита
+                    return AddLimit_ChoiceLimitStartDate;
+                case 3:
+                    // Выбор валюты
+                    return AddLimit_ChoiceCurrency;
+                case 4:
+                    // Выбор размера лимита
+                    return AddLimit_ChoiceLimitSize;
+                case 5:
+                    // Выбор типа лимита
+                    return AddLimit_ChoiceLimitType;
+                case 6:
+                    {
+                        // Не Custom лимит
+                        if (commands[5] != "/0")
+                            return AddLimit_DoItAndreturnCompleteMessage;
+                        // Для Custom дату задаёт сам пользователь
+                        else
+                            return AddLimit_ChoiceLimitEndDate;
+                    }
+                case 7:
+                    // Получены данные о дате окончания лимита для кастомного типа
+                    return AddLimit_DoItAndreturnCompleteMessage;
+
+                default:
+                    return DefaultAnswer;
+            }
+        }
+
+        private Func<string, List<string>, string> GetNextStep_AddLimitType(string userName, List<string> commands)
+        {
+            return DefaultAnswer;
+        }
+
+        private Func<string, List<string>, string> GetNextStep_ChangeLimitType(string userName, List<string> commands)
+        {
+            return DefaultAnswer;
         }
 
         #endregion

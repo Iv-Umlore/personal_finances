@@ -1,7 +1,7 @@
 ﻿using DataInteraction;
 using DataInteraction.Models;
 
-namespace TelegramBot.Cases.Currency
+namespace TelegramBot.Cases.Currencies
 {
     /// <summary>
     /// Работа с валютами

@@ -1,5 +1,5 @@
 ﻿using DataInteraction;
-using TelegramBot.Cases.Currency;
+using TelegramBot.Cases.Currencies;
 using TelegramBot.Cases.Categories;
 using TelegramBot.Cases.Limits;
 using TelegramBot.CommonStrings;

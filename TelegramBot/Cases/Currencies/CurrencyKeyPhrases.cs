@@ -1,4 +1,4 @@
-﻿namespace TelegramBot.Cases.Currency
+﻿namespace TelegramBot.Cases.Currencies
 {
     public static class CurrencyKeyPhrases
     {

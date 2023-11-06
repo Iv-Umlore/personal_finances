@@ -1,7 +1,6 @@
-﻿using System.Text;
-
-namespace TelegramBot.Cases.Categories
+﻿namespace TelegramBot.Cases.Categories
 {
+
     public static class CategoryKeyPhrases
     {
         public static string DefaultCategory = "Категория по умолчанию";
