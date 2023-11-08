@@ -127,7 +127,7 @@ namespace TelegramBot.Cases.Limits
         /// <exception cref="NotImplementedException"></exception>
         private string AddLimit_DoItAndreturnCompleteMessage(string userName, List<string> commands)
         {
-            if (commands.Count != 6 || commands.Count != 7)
+            if (commands.Count != 6 && commands.Count != 7)
                 throw new ApplicationException("Choice Limit End Date - incorrect argument count");
 
             if (commands.Count == 6)
@@ -136,7 +136,7 @@ namespace TelegramBot.Cases.Limits
                 LimitType limitType = GetSelectedLimitType(commands[5]); 
 
                 IFormatProvider provider = new CultureInfo("en-GB");
-                // TODO: Cheak
+                // TODO: Check
                 DateTime limitPeriod = DateTime.ParseExact(limitType.Period, "dd.MM.yyyy", provider);
                 DateTime endDate = startDate.AddDays(limitPeriod.Day);
                 endDate.AddMonths(limitPeriod.Month);
@@ -155,7 +155,7 @@ namespace TelegramBot.Cases.Limits
                 // Проверка корректности введенной даты, чтобы в дальнейшем не возникло проблемы
                 try
                 {
-                    GetEnteredDate(commands, 7, __GeneratedEndDate);
+                    GetEnteredDate(commands, 6, __GeneratedEndDate);
                 }
                 catch (ApplicationException e)
                 {
