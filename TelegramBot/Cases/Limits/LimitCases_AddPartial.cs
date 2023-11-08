@@ -132,7 +132,21 @@ namespace TelegramBot.Cases.Limits
 
             if (commands.Count == 6)
             {
+                DateTime startDate = GetEnteredDate(commands, 2, __GeneratedStartedDate);
+                LimitType limitType = GetSelectedLimitType(commands[5]); 
 
+                IFormatProvider provider = new CultureInfo("en-GB");
+                // TODO: Cheak
+                DateTime limitPeriod = DateTime.ParseExact(limitType.Period, "dd.MM.yyyy", provider);
+                DateTime endDate = startDate.AddDays(limitPeriod.Day);
+                endDate.AddMonths(limitPeriod.Month);
+                endDate.AddYears(limitPeriod.Year);
+
+                long currId = GetSelectedCurrency(commands[3]).ID;
+                long limitSumm = long.Parse(commands[4]);
+                long limitTypeId = limitType.ID;
+
+                AddLimit(currId, limitSumm, limitTypeId, startDate, endDate);
             }
 
 
@@ -277,7 +291,7 @@ namespace TelegramBot.Cases.Limits
         {
             StringBuilder str = new StringBuilder();
             str.Append(lType.Name + " (");
-            str.Append(lType.IsAutoProlongation ? " Периодический с периодом " + lType.Period : " Период задаётся пользователем ");
+            str.Append(lType.IsAutoProlongation ? " Периодический с периодом " + lType.Period + " Дней . месяцев . лет " : " Период задаётся пользователем ");
             str.Append(" )");
 
             return str.ToString();
