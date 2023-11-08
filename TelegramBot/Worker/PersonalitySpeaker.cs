@@ -6,7 +6,7 @@ using TelegramBot.CommonStrings;
 
 namespace TelegramBot.Worker
 {
-    public class UserSpeaker
+    public class PersonalitySpeaker
     {
         private Dictionary<string, List<string>> _userFullCommands = new Dictionary<string, List<string>>();
         private Dictionary<string, string> _userLastCommands = new Dictionary<string, string>();
@@ -15,7 +15,7 @@ namespace TelegramBot.Worker
         private LimitCases _limitCases;
         private CategoriesCases _categoriesCases;
 
-        public UserSpeaker(DbProxy proxy)
+        public PersonalitySpeaker(DbProxy proxy)
         {
             _currencyCases = new CurrencyCases(proxy);
             _limitCases = new LimitCases(proxy);
@@ -34,11 +34,11 @@ namespace TelegramBot.Worker
             {
                 _userLastCommands[userName] = "";
                 _userFullCommands[userName].Clear();
-                return CommonPhraces.BaseMessage;
+                return CommonPhrases.BaseMessage;
             }
             
             if (command.Length < 0)
-                return CommonPhraces.EmptyPhrase + CommonPhraces.CanсelCommand;
+                return CommonPhrases.EmptyPhrase + CommonPhrases.CanсelCommand;
 
             if (KeyWords.Commands.Contains(command))
             {
@@ -52,18 +52,18 @@ namespace TelegramBot.Worker
             switch (_userLastCommands[userName])
             {
                 case KeyWords.Limits:
-                    return _limitCases.ProcessTheCommand(userName, _userFullCommands[userName]) + CommonPhraces.CanсelCommand;
+                    return _limitCases.ProcessTheCommand(userName, _userFullCommands[userName]);
 
                 case KeyWords.Currency:
-                    return _currencyCases.ProcessTheCommand(userName, _userFullCommands[userName]) + CommonPhraces.CanсelCommand;
+                    return _currencyCases.ProcessTheCommand(userName, _userFullCommands[userName]);
 
                 case KeyWords.Category:
-                    return _categoriesCases.ProcessTheCommand(userName, _userFullCommands[userName]) + CommonPhraces.CanсelCommand;
+                    return _categoriesCases.ProcessTheCommand(userName, _userFullCommands[userName]);
 
                 default:
                     _userLastCommands[userName] = "";
                     _userFullCommands[userName].Clear();
-                    return CommonPhraces.BaseMessage;
+                    return CommonPhrases.BaseMessage;
             }
         }
     }

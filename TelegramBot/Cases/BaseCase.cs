@@ -1,7 +1,16 @@
-﻿namespace TelegramBot.Cases
+﻿using DataInteraction;
+
+namespace TelegramBot.Cases
 {
     public abstract class BaseCase : IBaseCase
     {
+
+        protected DbProxy _dbProxy;
+
+        protected BaseCase(DbProxy dbProxy) {
+            _dbProxy = dbProxy;
+        }
+
         /// <summary>
         /// Получить следующую инструкцию для общения с пользователем
         /// </summary>

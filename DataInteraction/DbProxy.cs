@@ -63,6 +63,11 @@ namespace DataInteraction
             return _dChanges.GetCurrencies();
         }
 
+        public List<Category> GetCategoryList()
+        {
+            return _dChanges.GetCategories();
+        }
+
         public List<LimitType> GetLimitTypes()
         {
             return _dChanges.GetLimitTypes();

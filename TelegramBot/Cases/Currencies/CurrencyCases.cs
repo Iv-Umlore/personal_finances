@@ -8,12 +8,7 @@ namespace TelegramBot.Cases.Currencies
     /// </summary>
     public class CurrencyCases : BaseCase
     {
-        private DbProxy _dbProxy;
-
-        public CurrencyCases(DbProxy dbProxy)
-        {
-            _dbProxy = dbProxy;
-        }
+        public CurrencyCases(DbProxy dbProxy) : base(dbProxy) { }
 
         protected override Func<string, List<string>, string> GetNextStep(string userName, List<string> commands)
         {

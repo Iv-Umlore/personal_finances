@@ -1,5 +1,4 @@
 ﻿using DataInteraction;
-using DataInteraction.Models;
 using Telegram.Bot;
 using Telegram.Bot.Exceptions;
 using Telegram.Bot.Polling;
@@ -19,7 +18,8 @@ namespace TelegramBot
         private ReceiverOptions _receiverOptions;
 
         private DbProxy _dbProxy;
-        private UserSpeaker _speaker;
+        private PersonalitySpeaker _personalSpeaker;
+        private GroupChatSpeaker _groupSpeaker;
 
         // Обработать чтобы не было вариантов Null
 
@@ -30,7 +30,8 @@ namespace TelegramBot
 
             _dbProxy = db;
             _mainConfId = confId;
-            _speaker = new UserSpeaker(db);
+            _personalSpeaker = new PersonalitySpeaker(db);
+            _groupSpeaker = new GroupChatSpeaker(db);
         }
 
         public async Task<bool> StartBot(string key)
@@ -80,28 +81,21 @@ namespace TelegramBot
                             {
                                 if (update.Message.Chat.Id == _mainConfId)
                                 {
-                                    if (update.Message != null && update.Message.Text != null && update.Message.Text.Contains(botName))
+                                    if (update.Message != null && update.Message.Text != null)
                                     {
-                                        // Хочу получать сообщения вида @bot сумма валюта категория . комментарий
-                                        string[] spliting = update.Message.Text.Split('-');
-                                        if (spliting.Length != 2)
-                                        {
-                                            await _tClient.SendTextMessageAsync(update.Message.Chat,
-                                                CommonPhraces.GetFormatMessage(botName));
-                                            return;
-                                        }
-                                        string comment = spliting[1];
-                                        string[] mainInfos = spliting[0].Split(" ", StringSplitOptions.RemoveEmptyEntries);
+                                        try { 
+                                            string answer = _groupSpeaker.DoSmtg(
+                                                update.Message.From.Username,
+                                                update.Message.Text,
+                                                botName, update.Message.Date);
 
-                                        try
-                                        {
-
-                                            var node = GetFinanceChangeForInsert(mainInfos, comment);
-                                            node.DateOfFixation = update.Message.Date;
-                                            node.FixedBy = _dbProxy.GetDbUserIdByUsername(update.Message?.From?.Username);
-
-                                            _dbProxy.InsertFinanceChange(node);
-                                            await _tClient.SendTextMessageAsync(update.Message.Chat, "Зафиксировано");
+                                            if (!string.IsNullOrEmpty(answer))
+                                            {
+                                                if (answer != CommonPhrases.DoneMessage)
+                                                    answer += CommonPhrases.CanсelCommand;
+                                                await _tClient.SendTextMessageAsync(update.Message.Chat, answer);
+                                            }
+                                        
                                         }
                                         catch (Exception ex)
                                         {
@@ -122,7 +116,9 @@ namespace TelegramBot
                                     await _tClient.SendTextMessageAsync(update.Message.Chat, "Отправлено пустое сообщение");
                                 try
                                 {
-                                    string answer = _speaker.DoSmtg(update.Message?.From.Username ,update.Message?.Text);
+                                    string answer = _personalSpeaker.DoSmtg(update.Message?.From.Username ,update.Message?.Text);
+                                    if (answer != CommonPhrases.DoneMessage)
+                                        answer += CommonPhrases.CanсelCommand;
                                     await _tClient.SendTextMessageAsync(update.Message.Chat, answer);
                                 }
                                 catch (Exception ex)
@@ -157,46 +153,5 @@ namespace TelegramBot
         }
 
         // TODO: Переаботать систему выбора категории. Пользователь может сам выбрать из предложенных
-
-        /// <summary>
-        /// @{botName} сумма валюта(опционально) категория - Комментарий
-        /// </summary>
-        private FinanceChange GetFinanceChangeForInsert(string[] messagePart, string comment)
-        {
-            // Нужно понять что за валюта
-            if (messagePart.Length == 4)
-            {
-                Currency cur = _dbProxy.GetLikelyCurrency(messagePart[2]);
-                var sum = double.Parse(messagePart[1]);
-                FinanceChange financeChange = new FinanceChange()
-                {
-                    Summ = sum,
-                    CurrencyId = cur.ID,
-                    CategoryId = _dbProxy.GetLikelyCategoryId(messagePart[3]),
-                    Comment = comment,
-                    SumInIternationalCurrency = sum / cur.LastExchangeRate
-                };
-                return financeChange;
-            }
-
-            // Валюта по умолчанию
-            if (messagePart.Length == 3)
-            {
-                Currency cur = _dbProxy.GetDefaultCurrency();
-                var sum = double.Parse(messagePart[1]);
-                FinanceChange financeChange = new FinanceChange()
-                {
-                    Summ = sum,
-                    CurrencyId = cur.ID,
-                    CategoryId = _dbProxy.GetLikelyCategoryId(messagePart[3]),
-                    Comment = comment,
-                    SumInIternationalCurrency = sum / cur.LastExchangeRate
-                };
-                return financeChange;
-            }
-
-            throw new Exception("Проблема с получением информации о категории");
-        }
-
     }
 }

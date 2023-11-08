@@ -178,7 +178,8 @@ namespace TelegramBot.Cases.Limits
                 AddLimit(currId, limitSumm, limitTypeId, startDate, endDate);
             }
 
-            return CommonPhraces.DoneMessage;
+            commands.Clear();
+            return CommonPhrases.DoneMessage;
         }
 
 

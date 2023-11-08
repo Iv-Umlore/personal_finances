@@ -6,8 +6,6 @@ namespace TelegramBot.Cases.Categories
 {
     public partial class CategoriesCases : BaseCase
     {
-        private readonly DbProxy _dbProxy;
-
         #region Data 
 
         // TODO сделать для каждого пользователя свою
@@ -15,9 +13,8 @@ namespace TelegramBot.Cases.Categories
 
         #endregion
 
-        public CategoriesCases(DbProxy dbProxy)
+        public CategoriesCases(DbProxy dbProxy) : base(dbProxy)
         {
-            _dbProxy = dbProxy;
             _lastCategoriesList = new List<CategorySimpleModel>();
         }
 

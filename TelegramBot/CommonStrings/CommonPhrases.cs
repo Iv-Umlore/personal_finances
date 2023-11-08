@@ -3,7 +3,7 @@
     /// <summary>
     /// Общие фразы для общения с пользователем
     /// </summary>
-    public static class CommonPhraces
+    public static class CommonPhrases
     {
         /// <summary>
         /// Базовая инструкция для начала взаимодействия с пользователем
@@ -36,7 +36,12 @@
         /// <param name="botName"> Имя бота, необходимо для формирования примера </param>
         public static string GetFormatMessage(string botName)
         {
-            return $"Ошибка формата!\r\n\r\nОжидаю получение информации о тратах в виде: \r\n@{botName} сумма валюта(опционально) категория - Комментарий \r\nПримеры:\r\n@{botName} 1000 Еда - Купили мороженое\r\n@{botName} 20.95 лари Кафе - Сходили в Макдоналдс\r\n\r\n Соблюдение пробелов и тире обязательно!";
+            return $"Ошибка формата!\r\n\r\nОжидаю получение информации о тратах в виде: \r\n@{botName} сумма валюта(опционально) - Комментарий \r\nПримеры:\r\n@{botName} 1000 - Купили мороженое\r\n@{botName} 20.95 лари - Сходили в Макдоналдс\r\n\r\n Соблюдение пробелов и тире обязательно!";
+        }
+
+        public static string GetInternalErrorMessage()
+        {
+            return $"Возникла ошибка - Время UTC {DateTime.UtcNow}";
         }
 
         #endregion

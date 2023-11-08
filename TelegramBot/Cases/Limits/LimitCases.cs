@@ -5,12 +5,7 @@ namespace TelegramBot.Cases.Limits
 {
     public partial class LimitCases : BaseCase
     {
-        private DbProxy _dbProxy;
-
-        public LimitCases(DbProxy dbProxy)
-        {
-            _dbProxy = dbProxy;
-        }
+        public LimitCases(DbProxy dbProxy) : base(dbProxy) { }
 
         protected override Func<string, List<string>, string> GetNextStep(string userName, List<string> commands)
         {

@@ -44,7 +44,8 @@ namespace TelegramBot.Cases.Categories
         {
             var userId = _dbProxy.GetDbUserIdByUsername(userName);
             AddCategory(userId, commands[3], _lastCategoriesList.Where(it => it.IdInList == 0).First().Id);
-            return CommonPhraces.DoneMessage;
+            commands.Clear();
+            return CommonPhrases.DoneMessage;
         }
 
         /// <summary>

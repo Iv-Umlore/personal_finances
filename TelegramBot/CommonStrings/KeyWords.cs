@@ -28,9 +28,5 @@
 
         public static List<string> Commands = new List<string>() { Category, Currency, Limits };
 
-
-
-        public static string CommonSeparator = "&^&";
-
     }
 }
