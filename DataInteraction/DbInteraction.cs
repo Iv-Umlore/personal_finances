@@ -5,24 +5,52 @@ using System.Data;
 
 namespace DataInteraction
 {
+    // TODO Async
     public class DbInteraction
     {
-        SqliteConnection connection;
+        private SqliteConnection connection;
 
         public DbInteraction(string connectionString) {
             connection = new SqliteConnection(connectionString);
         }
 
+        /// <summary>
+        /// Возвращает true при успешном открытии соединения
+        /// </summary>
         public bool OpenConnection()
         {
             try
             {
-                connection.Open();
+                if (connection.State != ConnectionState.Open &&
+                    connection.State != ConnectionState.Connecting && 
+                    connection.State != ConnectionState.Connecting)
+                    connection.Open();
                 return true;
             }
             catch (Exception ex) {
                 Console.WriteLine("Проблема при открытии соединения: \r\n", ex.Message);
                 return false; 
+            }
+        }
+
+        /// <summary>
+        /// Возвращает true при закрытом соединении
+        /// </summary>
+        public bool CloseConnection()
+        {
+            try
+            {
+                if (connection.State != ConnectionState.Closed)
+                {
+                    while (connection.State == ConnectionState.Connecting || connection.State == ConnectionState.Executing) ;
+                    connection.Close();
+                }
+                return true;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("Проблема при закрытии соединения: \r\n", ex.Message);
+                return false;
             }
         }
 

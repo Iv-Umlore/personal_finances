@@ -24,7 +24,7 @@ namespace TelegramBot.Cases.Limits
 
                 if (commands[1] == LimitKeyPhrases.ChangeLimitType)
                     return GetNextStep_ChangeLimitType(userName, commands);
-
+                // TODO: Забыл про ввод задолжности
                 if (commands[1] == LimitKeyPhrases.AddLimit)
                     return GetNextStep_AddLimit(commands);
             }
@@ -34,14 +34,15 @@ namespace TelegramBot.Cases.Limits
 
         #region MainActions
 
-        private bool AddLimit(long limitId, long currencyId, double limitSumm, long LimitType,
+
+
+        private bool AddLimit(long currencyId, double limitSumm, long LimitType,
             DateTime startPeriod, DateTime endPeriod, double creditByLastPeriod = 0.0)
         {
             try
             {
                 _dbProxy.InsertLimit(new Limit()
                 {
-                    ID = limitId,
                     CurrencyId = currencyId,
                     StartPeriod = startPeriod,
                     EndPeriod = endPeriod,
@@ -150,5 +151,15 @@ namespace TelegramBot.Cases.Limits
         }
 
         #endregion
+
+        #region HelpMethod
+
+        public void RemoveLastCommand(List<string> commands)
+        {
+            commands.RemoveAt(commands.FindLastIndex(it => it.Length != 0));
+        }
+
+        #endregion
+
     }
 }

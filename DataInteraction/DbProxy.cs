@@ -71,28 +71,19 @@ namespace DataInteraction
         public Currency GetDefaultCurrency()
         {
             var res = _dChanges.GetDefaultCurrency();
-            if (res == null)
-                throw new Exception("Валюта по умолчанию не найдена");
-
-            return res;
+            return res ?? throw new Exception("Валюта по умолчанию не найдена");
         }
 
         public Currency GetLikelyCurrency(string currName)
         {
             var result = _dChanges.GetLikelyCurrency(currName);
-            if (result == null)
-                throw new Exception("Не удалось найти похожую валюту");
-            return result;   
-
+            return result == null ? throw new Exception("Не удалось найти похожую валюту") : result;
         }
 
         public long GetLikelyCategoryId(string category)
         {
             var res = _dChanges.GetLikelyCategory(category);
-            if (res == null)
-                throw new Exception("Не удалось cопоставить категорию");
-
-            return res.ID;
+            return res == null ? throw new Exception("Не удалось cопоставить категорию") : res.ID;
         }
 
         public long GetDbUserIdByUsername(string userName)
@@ -100,10 +91,7 @@ namespace DataInteraction
             if (userName == null)
                 return 0;
             var user = _dChanges.GetUserByName(userName);
-            if (user == null)
-                throw new Exception("Пользователь не найден");
-
-            return user.ID;
+            return user == null ? throw new Exception("Пользователь не найден") : user.ID;
         }
 
         public List<CategorySimpleModel> GetSubdirectory(long parentId)
