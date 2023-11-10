@@ -28,6 +28,11 @@
         /// </summary>
         public static string DoneMessage = "Успешно выполнено";
 
+        /// <summary>
+        /// Вступление перед выдачей лимитов
+        /// </summary>
+        public static string LimitMessage = "Текущее состояние лимитов:";
+
         #region Methods
 
         /// <summary>

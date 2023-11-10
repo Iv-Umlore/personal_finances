@@ -111,6 +111,16 @@ namespace DataInteraction
             }).ToList();
         }
 
+        public List<Limit> GetActiveLimits()
+        {
+            return _dChanges.GetLimits(true);
+        }
+
+        public List<FinanceChange> GetPastFinancialChange(DateTime startDate, DateTime endDate)
+        {
+            return _dChanges.GetFinanceChangesByPeriod(startDate, endDate);
+        }
+
         #endregion
 
 

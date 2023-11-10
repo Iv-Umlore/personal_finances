@@ -9,7 +9,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DataInteraction", "DataInte
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PersonalFinances", "PersonalFinanses\PersonalFinances.csproj", "{123019C6-E9AE-4CBD-A325-FBFF4F786917}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Common", "Common\Common.csproj", "{0A556738-B9C9-470D-840D-DA624AD407DD}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Common", "Common\Common.csproj", "{0A556738-B9C9-470D-840D-DA624AD407DD}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Services", "Services\Services.csproj", "{0F5A69D6-235E-43F8-A442-D0C999672C3E}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -33,6 +35,10 @@ Global
 		{0A556738-B9C9-470D-840D-DA624AD407DD}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{0A556738-B9C9-470D-840D-DA624AD407DD}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{0A556738-B9C9-470D-840D-DA624AD407DD}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0F5A69D6-235E-43F8-A442-D0C999672C3E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0F5A69D6-235E-43F8-A442-D0C999672C3E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0F5A69D6-235E-43F8-A442-D0C999672C3E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0F5A69D6-235E-43F8-A442-D0C999672C3E}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

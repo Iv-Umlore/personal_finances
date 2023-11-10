@@ -1,4 +1,6 @@
 ﻿using DataInteraction;
+using Services.Interfaces;
+using Services.Realization;
 using Telegram.Bot;
 using Telegram.Bot.Exceptions;
 using Telegram.Bot.Polling;
@@ -17,21 +19,21 @@ namespace TelegramBot
         private ITelegramBotClient _tClient;
         private ReceiverOptions _receiverOptions;
 
-        private DbProxy _dbProxy;
         private PersonalitySpeaker _personalSpeaker;
         private GroupChatSpeaker _groupSpeaker;
+        private ILimitService _limitService;
 
         // Обработать чтобы не было вариантов Null
 
         /// <summary>
         /// Конструктор
         /// </summary>
-        public BotSheduler(long confId, DbProxy db) {
-
-            _dbProxy = db;
+        public BotSheduler(long confId, DbProxy db) 
+        {
             _mainConfId = confId;
             _personalSpeaker = new PersonalitySpeaker(db);
             _groupSpeaker = new GroupChatSpeaker(db);
+            _limitService = new LimitService(db);
         }
 
         public async Task<bool> StartBot(string key)
@@ -93,6 +95,11 @@ namespace TelegramBot
                                             {
                                                 if (answer != CommonPhrases.DoneMessage)
                                                     answer += CommonPhrases.CanсelCommand;
+                                                else
+                                                {
+                                                    answer += "\r\n" + CommonPhrases.LimitMessage + "\r\n" +
+                                                        _limitService.GetActiveLimitResult();
+                                                }
                                                 await _tClient.SendTextMessageAsync(update.Message.Chat, answer);
                                             }
                                         

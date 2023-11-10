@@ -14,7 +14,7 @@
 
         public static DateTime StringToDate(string str)
         {
-            return DateTime.MinValue;
+            return DateTime.Parse(str);
         }
     }
 }

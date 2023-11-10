@@ -285,6 +285,60 @@ namespace DataInteraction
             return categories;
         }
 
+        /// <summary>
+        /// Вернуть действующие или все лимиты
+        /// </summary>
+        /// <param name="isActive"></param>
+        /// <returns></returns>
+        public List<Limit> GetLimits(bool isActive)
+        {
+            var limits = new List<Limit>();
+            try { 
+                _db.OpenConnection();
+
+                limits = _db.GetLimits();
+
+                DateTime now = DateTime.Now;
+
+                return (isActive) ?
+                    limits.Where(it => it.StartPeriod < now && now < it.EndPeriod).ToList() :
+                    limits;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex);
+            }
+            finally
+            {
+                _db.CloseConnection();
+            }
+
+            return limits;
+        }
+
+        public List<FinanceChange> GetFinanceChangesByPeriod(DateTime startPeriod, DateTime endPeriod)
+        {
+            var result = new List<FinanceChange>();
+            try
+            {
+                _db.OpenConnection();
+
+                result = _db.GetFinanceChanges(startPeriod, endPeriod);
+
+                return result;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex);
+            }
+            finally
+            {
+                _db.CloseConnection();
+            }
+
+            return result;            
+        }
+
         #endregion
 
     }

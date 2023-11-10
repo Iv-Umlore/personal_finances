@@ -222,7 +222,9 @@ namespace DataInteraction
                         StartPeriod = Converter.StringToDate(reader.GetString(1)),
                         EndPeriod = Converter.StringToDate(reader.GetString(2)),
                         LimitSumm = reader.GetDouble(3),
-
+                        LimitTypeId = reader.GetInt64(4),
+                        CreditByLastPeriod = reader.GetDouble(5),
+                        CurrencyId = reader.GetInt64(6)
                     });
                 }
             }
@@ -230,9 +232,19 @@ namespace DataInteraction
             return result;
         }
 
-        public List<FinanceChange> GetFinanceChanges() {
+        public List<FinanceChange> GetFinanceChanges(
+            DateTime? startDate = null,
+            DateTime? endDate = null) {
             SqliteCommand command = connection.CreateCommand();
             command.CommandText = $"SELECT {SQLModelFields.GetFinanceChange_Full()} FROM main.FinanceChanges";
+
+            if (startDate != null && endDate != null) {
+                command.CommandText += " as FCh WHERE " +
+                    "FCh.DateOfFixation > @startDate AND " +
+                    "FCh.DateOfFixation < @endDate";
+                command.Parameters.Add(new SqliteParameter("@startDate", Converter.DateToString(startDate.Value)));
+                command.Parameters.Add(new SqliteParameter("@endDate", Converter.DateToString(endDate.Value)));
+            }
 
             List<FinanceChange> result = new List<FinanceChange>();
 
