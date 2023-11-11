@@ -27,7 +27,8 @@ namespace TelegramBot.Cases.FinancialChange
 
         private Dictionary<int, Category> __CategoriesAdded;
 
-        private string NextSubcategoriesSumbol = ">>";
+        private string NextSubcategoriesSumbol = "--";
+        private string NextLeverBeauty = "> ";
 
         private string dictKeySeparator = "_";
 
@@ -164,9 +165,9 @@ namespace TelegramBot.Cases.FinancialChange
                 throw new ApplicationException("Havn't root category !!! ");
 
             StringBuilder result = new StringBuilder();
-            int keyCounter = 0;
+            int keyCounter = 1;
 
-            RecursiveAddingCategories(categories, dictForSave, result, root, 0, ref keyCounter);
+            RecursiveAddingCategories(categories, dictForSave, result, root, 0, keyCounter);
 
             return result.ToString();
         }
@@ -184,7 +185,7 @@ namespace TelegramBot.Cases.FinancialChange
             StringBuilder builder,
             Category root,
             int heigthCall,
-            ref int keyCounter) 
+            int keyCounter) 
         {
             // TODO: Ограничение не должно быть на этом уровне. Должно быть на уровне создания
             if (heigthCall > 6)
@@ -193,16 +194,25 @@ namespace TelegramBot.Cases.FinancialChange
                 return;
             }
 
+
             builder.Append("\r\n");
             for (int i = 0; i < heigthCall; i++)
                 builder.Append(NextSubcategoriesSumbol);
+            builder.Append(NextLeverBeauty);
+
             builder.Append($"/{keyCounter}{dictKeySeparator}{CommonPhrases.CategoryLinkName} - {root.Name}");
             dictForSave[keyCounter] = root;
-            keyCounter++;
+            keyCounter = keyCounter * 10;// keyCounter++;
 
             var subCategories = categories.Where(cat => cat.ParentID == root.ID).ToList();
-            foreach(Category category in subCategories)
-                RecursiveAddingCategories(categories, dictForSave, builder, category, heigthCall + 1, ref keyCounter);
+            int addValue = 1;
+            foreach (Category category in subCategories)
+            {
+                RecursiveAddingCategories(categories, dictForSave, builder, category, heigthCall + 1, keyCounter + addValue);
+                addValue++;
+                if (keyCounter == 10)
+                    builder.AppendLine();
+            }
         }
     }
 }
