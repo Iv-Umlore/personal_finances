@@ -201,6 +201,9 @@ namespace TelegramBot.Cases.FinancialChange
             builder.Append(NextLeverBeauty);
 
             builder.Append($"/{keyCounter}{dictKeySeparator}{CommonPhrases.CategoryLinkName} - {root.Name}");
+            if (keyCounter == 1)
+                builder.AppendLine();
+
             dictForSave[keyCounter] = root;
             keyCounter = keyCounter * 10;// keyCounter++;
 
