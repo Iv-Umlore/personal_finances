@@ -27,7 +27,7 @@ namespace TelegramBot.Cases.FinancialChange
 
         private Dictionary<int, Category> __CategoriesAdded;
 
-        private string NextSubcategoriesSumbol = "> ";
+        private string NextSubcategoriesSumbol = ">>";
 
         private string dictKeySeparator = "_";
 
@@ -120,7 +120,7 @@ namespace TelegramBot.Cases.FinancialChange
         private FinanceChange GetFinanceChangeForInsert(string[] messagePart, string comment, long categoryId)
         {
             // Нужно понять что за валюта
-            if (messagePart.Length == 4)
+            if (messagePart.Length == 3)
             {
                 Currency cur = _dbProxy.GetLikelyCurrency(messagePart[2]);
                 var sum = double.Parse(messagePart[1]);
@@ -136,7 +136,7 @@ namespace TelegramBot.Cases.FinancialChange
             }
 
             // Валюта по умолчанию
-            if (messagePart.Length == 3)
+            if (messagePart.Length == 2)
             {
                 Currency cur = _dbProxy.GetDefaultCurrency();
                 var sum = double.Parse(messagePart[1]);
@@ -148,6 +148,7 @@ namespace TelegramBot.Cases.FinancialChange
                     Comment = comment,
                     SumInIternationalCurrency = sum / cur.LastExchangeRate
                 };
+
                 return financeChange;
             }
 
@@ -165,7 +166,7 @@ namespace TelegramBot.Cases.FinancialChange
             StringBuilder result = new StringBuilder();
             int keyCounter = 0;
 
-            RecursiveAddinCategories(categories, dictForSave, result, root, 0, ref keyCounter);
+            RecursiveAddingCategories(categories, dictForSave, result, root, 0, ref keyCounter);
 
             return result.ToString();
         }
@@ -177,7 +178,7 @@ namespace TelegramBot.Cases.FinancialChange
         /// <param name="dictForSave"> Словарь для сохранения вариантов </param>
         /// <param name="builder"> Для формирования итоговой строки </param>
         /// <param name="heigthCall"> Глубина погружения </param>
-        private void RecursiveAddinCategories(
+        private void RecursiveAddingCategories(
             List<Category> categories,
             Dictionary<int, Category> dictForSave, 
             StringBuilder builder,
@@ -195,13 +196,13 @@ namespace TelegramBot.Cases.FinancialChange
             builder.Append("\r\n");
             for (int i = 0; i < heigthCall; i++)
                 builder.Append(NextSubcategoriesSumbol);
-            builder.Append($"/{keyCounter}{dictKeySeparator}{_botName} - {root.Name}");
+            builder.Append($"/{keyCounter}{dictKeySeparator}{CommonPhrases.CategoryLinkName} - {root.Name}");
             dictForSave[keyCounter] = root;
             keyCounter++;
 
             var subCategories = categories.Where(cat => cat.ParentID == root.ID).ToList();
             foreach(Category category in subCategories)
-                RecursiveAddinCategories(categories, dictForSave, builder, category, heigthCall + 1, ref keyCounter);
+                RecursiveAddingCategories(categories, dictForSave, builder, category, heigthCall + 1, ref keyCounter);
         }
     }
 }

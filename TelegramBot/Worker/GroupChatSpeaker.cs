@@ -30,7 +30,7 @@ namespace TelegramBot.Worker
                     return CommonPhrases.DoneMessage;
                 }
 
-                if (command.Contains(botName))
+                if (command.Contains(botName) || command.Contains(CommonPhrases.CategoryLinkName) )
                 {
                     if (command.Contains(" - "))
                         _commands[userName].Clear();

@@ -33,6 +33,11 @@
         /// </summary>
         public static string LimitMessage = "Текущее состояние лимитов:";
 
+        /// <summary>
+        /// Используется в командах для бота в общем чате, для идентификации команды
+        /// </summary>
+        public static string CategoryLinkName = "CatGory";
+
         #region Methods
 
         /// <summary>
