@@ -55,7 +55,7 @@ namespace TelegramBot.Cases.FinancialChange
                 case 2:
                     return FinalStep;
                 default:
-                    return DefaultAnswer;
+                    return base.DefaultAnswer;
             }
         }
 

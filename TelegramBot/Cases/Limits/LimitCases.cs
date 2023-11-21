@@ -131,7 +131,7 @@ namespace TelegramBot.Cases.Limits
                     return AddLimit_DoItAndreturnCompleteMessage;
 
                 default:
-                    return DefaultAnswer;
+                    return base.DefaultAnswer;
             }
         }
 

@@ -6,13 +6,41 @@ namespace TelegramBot.Cases.Currencies
     /// <summary>
     /// Работа с валютами
     /// </summary>
-    public class CurrencyCases : BaseCase
+    public partial class CurrencyCases : BaseCase
     {
         public CurrencyCases(DbProxy dbProxy) : base(dbProxy) { }
 
         protected override Func<string, List<string>, string> GetNextStep(string userName, List<string> commands)
         {
-            throw new NotImplementedException();
+            switch (commands.Count)
+            {
+                case 1:
+                    return GetFirstMessage;
+                case 2:
+                    // main name
+                    return AddCurrency_Get1Message;
+                case 3:
+                    // other name
+                    return AddCurrency_Get2Message;
+                case 4:
+                    // sumbol
+                    return AddCurrency_Get3Message;
+                case 5:
+                    // LastExchangeRate
+                    return AddCurrency_Get4Message;
+                case 6:
+                    // IsMainStable
+                    return AddCurrency_Get5Message;
+                case 7:
+                    // IsDefault
+                    return AddCurrency_Get6Message;
+                case 9:
+                    // Call ADD Currency
+                    return AddCurrency_Result;
+                default:
+                    return base.DefaultAnswer;
+
+            }
         }
 
         /// <summary>
@@ -85,5 +113,15 @@ namespace TelegramBot.Cases.Currencies
                 return false;
             }
         }
+
+        #region HelpMethods
+
+        private string GetFirstMessage(string userName, List<string> commands)
+        {
+            return "";
+        }
+
+        #endregion
+
     }
 }

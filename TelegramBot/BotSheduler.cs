@@ -85,7 +85,8 @@ namespace TelegramBot
                                 {
                                     if (update.Message != null && update.Message.Text != null)
                                     {
-                                        try { 
+                                        try 
+                                        { 
                                             string answer = _groupSpeaker.DoSmtg(
                                                 update.Message.From.Username,
                                                 update.Message.Text,

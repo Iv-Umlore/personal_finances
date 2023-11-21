@@ -28,19 +28,19 @@ namespace TelegramBot.Cases.Categories
                     if (commands[1] == CategoryKeyPhrases.AddCategory)
                         return AddCategory_DirectoryFirstChoice;
 
-                    return DefaultAnswer;
+                    return base.DefaultAnswer;
                 case 3:
                     if (commands[1] == CategoryKeyPhrases.AddCategory)
                         return AddCategory_DirectoryOtherChoice;
 
-                    return DefaultAnswer;
+                    return base.DefaultAnswer;
                 case 4:
                     if (commands[1] == CategoryKeyPhrases.AddCategory)
                         return AddCategory_DoItAndReturnCompleteAnswer;
 
-                    return DefaultAnswer;
+                    return base.DefaultAnswer;
                 default:
-                    return DefaultAnswer;
+                    return base.DefaultAnswer;
 
             }
         }
